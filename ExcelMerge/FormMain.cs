@@ -72,8 +72,8 @@ namespace ExcelMerge
         {
             try
             {
-                var inputs1 = ProcessInputFile1(textBoxInput1.Text);
-                var inputs2 = ProcessInputFile2(textBoxInput2.Text);
+                var inputs1 = ProcessInputFile(textBoxInput1.Text);
+                var inputs2 = ProcessInputFile(textBoxInput2.Text);
 
                 _resultOutput = new List<OutputData>();
                 foreach (var input1 in inputs1)
@@ -102,47 +102,33 @@ namespace ExcelMerge
             }
         }
 
-        #region Input file 2
-        private Dictionary<string, InputData> ProcessInputFile2(string filename)
-        {
-            var input = new Dictionary<string, InputData>();
-            using (var strm = new System.IO.FileStream(filename, System.IO.FileMode.Open))
-            {
-                IWorkbook workbook = new XSSFWorkbook(strm);
-                ISheet sheetSrc = workbook.GetSheet("Sheet1");
-                ValidateFirstRow(sheetSrc);
-
-                for (int rownum = 1; rownum < sheetSrc.PhysicalNumberOfRows; ++rownum)
-                {
-                    var row = (XSSFRow)sheetSrc.GetRow(rownum);
-                    InputData data = ProcessInputRow(row);
-                    if (data != null)
-                    {
-                        input.Add(data.Sifra, data);
-                    }
-                }
-            }
-            return input;
-        }
-        #endregion
-
-        #region Input file 1
-        private Dictionary<string, InputData> ProcessInputFile1(string filename)
+        #region Input file processing
+        private Dictionary<string, InputData> ProcessInputFile(string filename)
         {
             var input1 = new Dictionary<string, InputData>();
             using (var strm = new System.IO.FileStream(filename, System.IO.FileMode.Open))
             {
                 IWorkbook workbook = new XSSFWorkbook(strm);
-                ISheet sheetSrc = workbook.GetSheet("Sheet1");
-                ValidateFirstRow(sheetSrc);
-
-                for (int rownum = 1; rownum < sheetSrc.PhysicalNumberOfRows; ++rownum)
+                ISheet sheetSrc = workbook.GetSheetAt(0);
+                if (sheetSrc == null)
                 {
-                    var row = (XSSFRow)sheetSrc.GetRow(rownum);
-                    InputData data = ProcessInputRow(row);
-                    if (data != null)
+                    MessageBox.Show("Neuspješno dohvaćanje lista iz tablice", "Greška!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    ValidateFirstRow(sheetSrc);
+
+                    for (int rownum = 1; rownum < sheetSrc.PhysicalNumberOfRows; ++rownum)
                     {
-                        input1.Add(data.Sifra, data);
+                        var row = (XSSFRow)sheetSrc.GetRow(rownum);
+                        if (row != null)
+                        {
+                            InputData data = ProcessInputRow(row);
+                            if (data != null)
+                            {
+                                input1.Add(data.Sifra, data);
+                            }
+                        }
                     }
                 }
             }
@@ -186,6 +172,10 @@ namespace ExcelMerge
         {
             IRow firstRow = sheetSrc.GetRow(0);
 
+            if (firstRow == null)
+            {
+                throw new Exception("Prvi list u tablici nema redaka.");
+            }
             if (firstRow.Cells[0].StringCellValue != "Sifra")
             {
                 throw new Exception(String.Format("Prvi stupac prve datoteke mora sadržavati šifre, a ne {0}", firstRow.Cells[0].StringCellValue));
