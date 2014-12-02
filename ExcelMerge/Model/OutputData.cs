@@ -10,8 +10,8 @@ namespace ExcelMerge.Model
     {
         public string Sifra { get; set; }
         public string Naziv { get; set; }
-        public double Kolicina1 { get; set; }
-        public double Kolicina2 { get; set; }
-        public double Stanje { get; set; }
+        public double Potreba { get; set; }
+        public double Skladiste { get; set; }
+        public double ZaNaruèiti { get; set; }
     }
 }

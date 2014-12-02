@@ -39,14 +39,14 @@ namespace ExcelMerge
 
         private void buttonOpenFile1_Click(object sender, EventArgs e)
         {
-            textBoxInput1.Text = GetExcelFileName("Odaberite prvu Excel datoteku");
+            textBoxInput1.Text = GetExcelFileName("Odaberite Excel datoteku s potrebama");
 
             UpdateUI();
         }
 
         private void buttonOpenFile2_Click(object sender, EventArgs e)
         {
-            textBoxInput2.Text = GetExcelFileName("Odaberite drugu Excel datoteku");
+            textBoxInput2.Text = GetExcelFileName("Odaberite Excel datoteku s trenutnim stanjem skladišta");
 
             UpdateUI();
         }
@@ -72,29 +72,45 @@ namespace ExcelMerge
         {
             try
             {
-                var inputs1 = ProcessInputFile(textBoxInput1.Text);
-                var inputs2 = ProcessInputFile(textBoxInput2.Text);
+                var potrebe = ProcessInputFile(textBoxInput1.Text);
+                var skladiste = ProcessInputFile(textBoxInput2.Text);
 
                 _resultOutput = new List<OutputData>();
-                foreach (var input1 in inputs1)
+                foreach (var potreba in potrebe)
                 {
-                    if (inputs2.ContainsKey(input1.Key))
+                    var potrebnaKolicina = potreba.Value.Kolicina;
+                    if (skladiste.ContainsKey(potreba.Key))
                     {
-                        var kolicina1 = input1.Value.Kolicina;
-                        var kolicina2 = inputs2[input1.Key].Kolicina;
-                        var stanje = kolicina2 - kolicina1;
+                        var kolicinaNaSkladistu = skladiste[potreba.Key].Kolicina;
+                        var stanjeNaSkladistu = kolicinaNaSkladistu - potrebnaKolicina;
+
+                        if (stanjeNaSkladistu < 0)
+                        {
+                            _resultOutput.Add(new OutputData()
+                            {
+                                Sifra = potreba.Value.Sifra,
+                                Naziv = potreba.Value.Naziv,
+                                Potreba = potrebnaKolicina,
+                                Skladiste = kolicinaNaSkladistu,
+                                ZaNaručiti = -stanjeNaSkladistu
+                            });
+                        }
+                    }
+                    else                  
+                    {
                         _resultOutput.Add(new OutputData()
-                        { 
-                            Sifra = input1.Value.Sifra,
-                            Naziv = input1.Value.Naziv,
-                            Kolicina1 = kolicina1,
-                            Kolicina2 = kolicina2,
-                            Stanje = kolicina2 - kolicina1
+                        {
+                            Sifra = potreba.Value.Sifra,
+                            Naziv = String.Format("NEMA ŠIFRE NA SKLADIŠTU ZA [{0}]", potreba.Value.Naziv),
+                            Potreba = potrebnaKolicina,
+                            Skladiste = 0,
+                            ZaNaručiti = potrebnaKolicina
                         });
                     }
                 }
 
                 dataGridViewResult.DataSource = _resultOutput;
+                groupBoxResult.Text = String.Format("Generirano redaka: {0} ", _resultOutput.Count);
             }
             catch (Exception excp)
             {
@@ -228,14 +244,18 @@ namespace ExcelMerge
             if (_resultOutput != null)
             {
                 workbook = new XSSFWorkbook();
+                var redStyle = workbook.CreateCellStyle();
+                redStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
+                redStyle.FillPattern = FillPattern.SolidForeground;
+
                 ISheet sheet = workbook.CreateSheet("Rezultat");
                 
                 IRow headerRow = sheet.CreateRow(0);
                 headerRow.CreateCell(0).SetCellValue("Sifra");
                 headerRow.CreateCell(1).SetCellValue("Naziv");
-                headerRow.CreateCell(2).SetCellValue("Kolicina1");
-                headerRow.CreateCell(3).SetCellValue("Kolicina2");
-                headerRow.CreateCell(4).SetCellValue("Stanje"); 
+                headerRow.CreateCell(2).SetCellValue("Potreba");
+                headerRow.CreateCell(3).SetCellValue("Skladiste");
+                headerRow.CreateCell(4).SetCellValue("Za naručiti"); 
 
                 int rownum = 1;
                 foreach (var item in _resultOutput)
@@ -243,17 +263,44 @@ namespace ExcelMerge
                     IRow row = sheet.CreateRow(rownum++);
 
                     row.CreateCell(0).SetCellValue(item.Sifra);
-                    row.CreateCell(1).SetCellValue(item.Naziv);
-                    row.CreateCell(2).SetCellValue(item.Kolicina1);
-                    row.CreateCell(3).SetCellValue(item.Kolicina2);
-                    row.CreateCell(4).SetCellValue(item.Stanje); 
+                    ICell nazivCell = row.CreateCell(1);
+                    if (item.Naziv.StartsWith("NEMA ŠIFRE NA SKLADIŠTU"))
+                    {
+                        nazivCell.CellStyle = redStyle;
+                    }
+                    nazivCell.SetCellValue(item.Naziv);
+
+                    row.CreateCell(2).SetCellValue(item.Potreba);
+                    row.CreateCell(3).SetCellValue(item.Skladiste);
+                    row.CreateCell(4).SetCellValue(item.ZaNaručiti); 
                 }
+
+                sheet.SetColumnWidth(0, 3500);
+                sheet.SetColumnWidth(1, 18000);
+                sheet.SetColumnWidth(2, 3000);
+                sheet.SetColumnWidth(3, 3000);
+                sheet.SetColumnWidth(4, 3000);
             }
 
             return workbook;
         }
 
         #endregion
+
+        private void dataGridViewResult_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == 1)
+            {
+                string naziv = e.Value as string;
+                if (naziv != null)
+                {
+                    if (naziv.StartsWith("NEMA ŠIFRE NA SKLADIŠTU"))
+                    {
+                        e.CellStyle.BackColor = Color.Red;
+                    }
+                }
+            }
+        }
 
     }
 }

@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.groupBoxInput = new System.Windows.Forms.GroupBox();
+            this.buttonOpenFile2 = new System.Windows.Forms.Button();
+            this.buttonOpenFile1 = new System.Windows.Forms.Button();
+            this.textBoxInput2 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxInput1 = new System.Windows.Forms.TextBox();
             this.groupBoxResult = new System.Windows.Forms.GroupBox();
             this.dataGridViewResult = new System.Windows.Forms.DataGridView();
-            this.textBoxInput1 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBoxInput2 = new System.Windows.Forms.TextBox();
-            this.buttonOpenFile1 = new System.Windows.Forms.Button();
-            this.buttonOpenFile2 = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonProcess = new System.Windows.Forms.Button();
             this.groupBoxInput.SuspendLayout();
@@ -63,6 +63,64 @@
             this.groupBoxInput.TabStop = false;
             this.groupBoxInput.Text = "Ulazne datoteke";
             // 
+            // buttonOpenFile2
+            // 
+            this.buttonOpenFile2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOpenFile2.Location = new System.Drawing.Point(624, 65);
+            this.buttonOpenFile2.Name = "buttonOpenFile2";
+            this.buttonOpenFile2.Size = new System.Drawing.Size(32, 29);
+            this.buttonOpenFile2.TabIndex = 5;
+            this.buttonOpenFile2.Text = "...";
+            this.buttonOpenFile2.UseVisualStyleBackColor = true;
+            this.buttonOpenFile2.Click += new System.EventHandler(this.buttonOpenFile2_Click);
+            // 
+            // buttonOpenFile1
+            // 
+            this.buttonOpenFile1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOpenFile1.Location = new System.Drawing.Point(625, 26);
+            this.buttonOpenFile1.Name = "buttonOpenFile1";
+            this.buttonOpenFile1.Size = new System.Drawing.Size(32, 29);
+            this.buttonOpenFile1.TabIndex = 4;
+            this.buttonOpenFile1.Text = "...";
+            this.buttonOpenFile1.UseVisualStyleBackColor = true;
+            this.buttonOpenFile1.Click += new System.EventHandler(this.buttonOpenFile1_Click);
+            // 
+            // textBoxInput2
+            // 
+            this.textBoxInput2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxInput2.Location = new System.Drawing.Point(252, 65);
+            this.textBoxInput2.Name = "textBoxInput2";
+            this.textBoxInput2.Size = new System.Drawing.Size(366, 29);
+            this.textBoxInput2.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 73);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(239, 21);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Datoteka sa stanjem na skladištu:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 34);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(166, 21);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Datoteka s potrebama:";
+            // 
+            // textBoxInput1
+            // 
+            this.textBoxInput1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxInput1.Location = new System.Drawing.Point(182, 26);
+            this.textBoxInput1.Name = "textBoxInput1";
+            this.textBoxInput1.Size = new System.Drawing.Size(436, 29);
+            this.textBoxInput1.TabIndex = 0;
+            // 
             // groupBoxResult
             // 
             this.groupBoxResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -80,70 +138,14 @@
             // 
             this.dataGridViewResult.AllowUserToAddRows = false;
             this.dataGridViewResult.AllowUserToDeleteRows = false;
+            this.dataGridViewResult.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewResult.Location = new System.Drawing.Point(3, 25);
             this.dataGridViewResult.Name = "dataGridViewResult";
             this.dataGridViewResult.Size = new System.Drawing.Size(820, 384);
             this.dataGridViewResult.TabIndex = 0;
-            // 
-            // textBoxInput1
-            // 
-            this.textBoxInput1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxInput1.Location = new System.Drawing.Point(182, 26);
-            this.textBoxInput1.Name = "textBoxInput1";
-            this.textBoxInput1.Size = new System.Drawing.Size(436, 29);
-            this.textBoxInput1.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 34);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(157, 21);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Prva ulazna datoteka:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 73);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(169, 21);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Druga ulazna datoteka:";
-            // 
-            // textBoxInput2
-            // 
-            this.textBoxInput2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxInput2.Location = new System.Drawing.Point(182, 65);
-            this.textBoxInput2.Name = "textBoxInput2";
-            this.textBoxInput2.Size = new System.Drawing.Size(436, 29);
-            this.textBoxInput2.TabIndex = 3;
-            // 
-            // buttonOpenFile1
-            // 
-            this.buttonOpenFile1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOpenFile1.Location = new System.Drawing.Point(625, 26);
-            this.buttonOpenFile1.Name = "buttonOpenFile1";
-            this.buttonOpenFile1.Size = new System.Drawing.Size(32, 29);
-            this.buttonOpenFile1.TabIndex = 4;
-            this.buttonOpenFile1.Text = "...";
-            this.buttonOpenFile1.UseVisualStyleBackColor = true;
-            this.buttonOpenFile1.Click += new System.EventHandler(this.buttonOpenFile1_Click);
-            // 
-            // buttonOpenFile2
-            // 
-            this.buttonOpenFile2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOpenFile2.Location = new System.Drawing.Point(624, 65);
-            this.buttonOpenFile2.Name = "buttonOpenFile2";
-            this.buttonOpenFile2.Size = new System.Drawing.Size(32, 29);
-            this.buttonOpenFile2.TabIndex = 5;
-            this.buttonOpenFile2.Text = "...";
-            this.buttonOpenFile2.UseVisualStyleBackColor = true;
-            this.buttonOpenFile2.Click += new System.EventHandler(this.buttonOpenFile2_Click);
+            this.dataGridViewResult.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewResult_CellFormatting);
             // 
             // buttonSave
             // 
